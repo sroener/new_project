@@ -1,7 +1,7 @@
 
 rule createRandomIntervals:
     input:
-        lambda wc: config["assembly"][wc.assembly]["genome"],
+        genome=lambda wc: config["assembly"][wc.assembly]["genome"],
     output:
         "results/workflow/{assembly}/{sample}.bed.gz"
     params:
@@ -10,9 +10,11 @@ rule createRandomIntervals:
         seed=lambda wc: samples.loc[wc.sample].seed,
     conda:
         "../envs/myenv.yaml"
+    log:
+        "results/logs/createRandomIntervals.{assembly}.{sample}.log"
     shell:
         """
-        bedtools random -l {params.l} -n {params.n} -seed {params.seed} -g {input[0]} | bgzip -c > {output}
+        bedtools random -l {params.l} -n {params.n} -seed {params.seed} -g {input.genome} | bgzip -c > {output}
         """
 
 
@@ -25,6 +27,8 @@ rule extendInterval:
     params:
         genome=lambda wc: config["assembly"][wc.assembly]["genome"],
         extra="-l 21 -r 20",
+    log:
+        "results/logs/extendInterval.{assembly}.{sample}.log"
     wrapper:
         "v0.69.0/bio/bedtools/slop"
 
@@ -36,6 +40,8 @@ rule getSequence:
         "results/workflow/{assembly}/{sample}.fa.gz"
     conda:
         "../envs/myenv.yaml"
+    log:
+        "results/logs/getSequence.{assembly}.{sample}.log"
     shell:
         """
         bedtools getfasta -fi {input.fasta} -bed {input.bed} | bgzip -c > {output}
