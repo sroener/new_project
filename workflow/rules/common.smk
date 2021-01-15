@@ -23,7 +23,7 @@ rule extendInterval:
         region="results/workflow/{assembly}/{sample}.bed.gz",
         genome=lambda wc: config["assembly"][wc.assembly]["genome"],
     output:
-        temp("results/workflow/{assembly}/{sample}.extended.bed")
+        "results/workflow/{assembly}/{sample}.extended.bed"
     params:
         genome=lambda wc: config["assembly"][wc.assembly]["genome"],
         extra="-l 21 -r 20",
