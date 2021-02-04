@@ -31,7 +31,7 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs"
+        args: "--configfile ../config/config.yml --use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs"
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.5.3
       with:
